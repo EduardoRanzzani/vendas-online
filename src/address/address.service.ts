@@ -29,7 +29,12 @@ export class AddressService {
   }
 
   async findAllAddress(): Promise<Address[]> {
-    return this.prisma.address.findMany();
+    return this.prisma.address.findMany({
+      include: {
+        city: true,
+        user: true,
+      },
+    });
   }
 
   async findAllAddressByUserId(userId: number): Promise<Address[]> {

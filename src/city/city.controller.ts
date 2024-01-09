@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { City } from '@prisma/client';
 import { CityService } from './city.service';
 
@@ -9,6 +9,14 @@ export class CityController {
   @Get()
   async findAll(): Promise<City[]> {
     return await this.service.findAll();
+  }
+
+  @Get('paginated')
+  async findAllPaginated(
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('pageSize', ParseIntPipe) pageSize: number = 10,
+  ): Promise<City[]> {
+    return await this.service.findAllPaginated(page, pageSize);
   }
 
   @Get(':stateId')

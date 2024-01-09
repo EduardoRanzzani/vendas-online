@@ -22,7 +22,19 @@ export class UserService {
   }
 
   async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      include: {
+        addresses: {
+          include: {
+            city: {
+              include: {
+                state: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   async findUserById(userId: number): Promise<User> {
@@ -36,6 +48,19 @@ export class UserService {
       throw new NotFoundException('UserId Not Found');
     }
 
+    return user;
+  }
+
+  async findUserByEmail(email: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User Not Found');
+    }
     return user;
   }
 }

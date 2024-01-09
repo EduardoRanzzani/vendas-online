@@ -17,9 +17,9 @@ model User {
     phone     String
     cpf       String    @unique
     password  String
-    typeUser  Int
-    createdAt DateTime  @default(now())
-    updatedAt DateTime? @updatedAt
+    typeUser  Int       @default(1) @map("type_user")
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt @map("updated_at")
 
     addresses Address[]
 
@@ -30,8 +30,8 @@ model State {
     id        Int       @id @default(autoincrement())
     name      String
     uf        String
-    createdAt DateTime  @default(now())
-    updatedAt DateTime? @updatedAt
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt @map("updated_at")
 
     cities City[]
 
@@ -41,11 +41,11 @@ model State {
 model City {
     id        Int       @id @default(autoincrement())
     name      String
-    stateId   Int
-    createdAt DateTime  @default(now())
-    updatedAt DateTime? @updatedAt
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt @map("updated_at")
 
     state     State     @relation(fields: [stateId], references: [id])
+    stateId   Int       @map("state_id")
     addresses Address[]
 
     @@map("tb_city")
@@ -55,14 +55,16 @@ model Address {
     id            Int       @id @default(autoincrement())
     street        String
     complement    String?
-    numberAddress Int
+    numberAddress Int       @map("number")
     cep           String
-    User          User      @relation(fields: [userId], references: [id])
-    userId        Int
-    City          City      @relation(fields: [cityId], references: [id])
-    cityId        Int
-    createdAt     DateTime  @default(now())
-    updatedAt     DateTime? @updatedAt
+    createdAt     DateTime  @default(now()) @map("created_at")
+    updatedAt     DateTime? @updatedAt @map("updated_at")
+
+    user   User @relation(fields: [userId], references: [id])
+    userId Int  @map("user_id")
+
+    city   City @relation(fields: [cityId], references: [id])
+    cityId Int  @map("city_id")
 
     @@map("tb_address")
 }
