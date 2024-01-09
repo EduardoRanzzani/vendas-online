@@ -5,9 +5,9 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
+import { ReturnLogin } from './dto/return-login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,7 +15,7 @@ export class AuthController {
 
   @Post('login')
   @UsePipes(ValidationPipe)
-  async login(@Body() loginDTO: LoginDTO): Promise<User> {
+  async login(@Body() loginDTO: LoginDTO): Promise<ReturnLogin> {
     return this.authService.login(loginDTO);
   }
 }

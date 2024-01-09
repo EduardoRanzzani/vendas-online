@@ -1,14 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { compare } from 'bcrypt';
+import { ReturnUser } from '../user/dto/return-user.dto';
 import { UserService } from '../user/user.service';
+import { LoginPayload } from './dto/login-payload.dto';
 import { LoginDTO } from './dto/login.dto';
+import { ReturnLogin } from './dto/return-login.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
-  async login(loginDTO: LoginDTO): Promise<User> {
+  async login(loginDTO: LoginDTO): Promise<ReturnLogin> {
     const user: User | undefined = await this.userService
       .findUserByEmail(loginDTO.username)
       .catch(() => undefined);
@@ -22,6 +29,9 @@ export class AuthService {
       throw new NotFoundException('Invalid username or password');
     }
 
-    return user;
+    return {
+      access_token: this.jwtService.sign({ ...new LoginPayload(user) }),
+      user: new ReturnUser(user),
+    };
   }
 }

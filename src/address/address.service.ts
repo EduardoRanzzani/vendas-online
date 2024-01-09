@@ -25,13 +25,24 @@ export class AddressService {
         ...createAddressDTO,
         userId,
       },
+      include: {
+        city: {
+          include: {
+            state: true,
+          },
+        },
+      },
     });
   }
 
   async findAllAddress(): Promise<Address[]> {
     return this.prisma.address.findMany({
       include: {
-        city: true,
+        city: {
+          include: {
+            state: true,
+          },
+        },
         user: true,
       },
     });

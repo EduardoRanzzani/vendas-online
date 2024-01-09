@@ -7,9 +7,12 @@ import {
   Post,
 } from '@nestjs/common';
 import { Address } from '@prisma/client';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from '../user/enum/user-type.enum';
 import { AddressService } from './address.service';
 import { CreateAddressDTO } from './dto/create-address.dto';
 
+@Roles(UserType.USER)
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
@@ -27,7 +30,7 @@ export class AddressController {
     return await this.addressService.findAllAddress();
   }
 
-  @Get(':userId')
+  @Get('/user/:userId')
   async getAllAddressByUser(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Address[]> {
