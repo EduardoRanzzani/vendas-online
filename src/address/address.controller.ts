@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Address } from '@prisma/client';
 import { Roles } from '../decorators/roles.decorator';
+import { UserId } from '../decorators/user-id.decorator';
 import { UserType } from '../user/enum/user-type.enum';
 import { AddressService } from './address.service';
 import { CreateAddressDTO } from './dto/create-address.dto';
@@ -17,11 +18,12 @@ import { CreateAddressDTO } from './dto/create-address.dto';
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
-  @Post(':userId')
+  @Post()
   async create(
-    @Param('userId', ParseIntPipe) userId: number,
+    @UserId() userId: number,
     @Body() createAddressDTO: CreateAddressDTO,
   ): Promise<Address> {
+    console.log({ userId });
     return await this.addressService.create(createAddressDTO, userId);
   }
 

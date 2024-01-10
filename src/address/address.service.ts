@@ -31,6 +31,7 @@ export class AddressService {
             state: true,
           },
         },
+        user: true,
       },
     });
   }
