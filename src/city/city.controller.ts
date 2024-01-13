@@ -1,12 +1,15 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { City } from '@prisma/client';
 import { CityService } from './city.service';
 
 @Controller('city')
+@ApiTags('Cities')
 export class CityController {
   constructor(private readonly service: CityService) {}
 
   @Get()
+  @ApiCreatedResponse()
   async findAll(): Promise<City[]> {
     return await this.service.findAll();
   }

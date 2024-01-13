@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Address, Prisma } from '@prisma/client';
 import { Roles } from '../decorators/roles.decorator';
 import { UserId } from '../decorators/user-id.decorator';
@@ -14,10 +15,12 @@ import { AddressService } from './address.service';
 
 @Roles(UserType.USER)
 @Controller('address')
+@ApiTags('Addresses')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
   @Post()
+  @ApiCreatedResponse({ type: Promise<Address> })
   async create(
     @UserId() userId: number,
     @Body() createAddressDTO: Prisma.AddressCreateInput,
@@ -27,11 +30,13 @@ export class AddressController {
   }
 
   @Get()
+  @ApiOkResponse({ type: Promise<Address[]>, isArray: true })
   async getAllAddress(): Promise<Address[]> {
     return await this.addressService.findAllAddress();
   }
 
   @Get('/user/:userId')
+  @ApiOkResponse({ type: Promise<Address[]>, isArray: true })
   async getAllAddressByUser(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Address[]> {

@@ -6,10 +6,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Prisma, User } from '@prisma/client';
 import { UserService } from './user.service';
 
 @Controller('user')
+@ApiTags('Users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

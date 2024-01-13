@@ -8,10 +8,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { ProductService } from './product.service';
 
 @Controller('products')
+@ApiTags('Products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
