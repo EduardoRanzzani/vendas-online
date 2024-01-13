@@ -19,6 +19,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
+  @Roles(UserType.ADMIN)
   async create(@Body() createCategoryDto: Prisma.CategoryCreateInput) {
     return await this.categoryService.create(createCategoryDto);
   }
@@ -30,7 +31,7 @@ export class CategoryController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.categoryService.findOne(id);
+    return await this.categoryService.findById(id);
   }
 
   @Patch(':id')

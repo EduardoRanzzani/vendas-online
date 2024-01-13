@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Category, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -11,21 +11,33 @@ export class CategoryService {
   }
 
   async findAll() {
-    return this.prismaService.category.findMany();
+    const categories = await this.prismaService.category.findMany();
+    if (!categories) {
+      throw new NotFoundException('No categories found');
+    }
+    return categories;
   }
 
-  async findOne(id: number) {
-    return this.prismaService.category.findUnique({ where: { id } });
+  async findById(id: number) {
+    const category = await this.prismaService.category.findUnique({
+      where: { id },
+    });
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+    return category;
   }
 
   async update(id: number, updateCategoryDto: Prisma.CategoryUpdateInput) {
+    await this.findById(id);
     return this.prismaService.category.update({
       where: { id },
       data: updateCategoryDto,
     });
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Category> {
+    await this.findById(id);
     return this.prismaService.category.delete({ where: { id } });
   }
 }

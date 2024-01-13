@@ -34,7 +34,7 @@ export class ProductController {
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     // 32:42
-    return this.productService.findOne(id);
+    return this.productService.findById(id);
   }
 
   @Patch(':id')

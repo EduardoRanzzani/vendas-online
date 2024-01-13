@@ -1,7 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
+  ParseIntPipe,
+  Patch,
   Post,
   UsePipes,
   ValidationPipe,
@@ -18,16 +22,39 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
-  async getAllUsers(): Promise<User[]> {
-    return await this.userService.findAll();
-  }
-
   @Post()
   @UsePipes(ValidationPipe)
   async createUser(
     @Body() createUserDTO: Prisma.UserCreateInput,
   ): Promise<User> {
     return await this.userService.createUser(createUserDTO);
+  }
+
+  @Get()
+  async getAllUsers(): Promise<User[]> {
+    return await this.userService.findAll();
+  }
+
+  @Get(':id')
+  async getUserById(@Param('id', ParseIntPipe) userId: number): Promise<User> {
+    return await this.userService.findUserById(userId);
+  }
+
+  @Get('/email/:email')
+  async getUserByEmail(@Param('email') email: string): Promise<User> {
+    return this.userService.findUserByEmail(email);
+  }
+
+  @Patch(':id')
+  async updateUser(
+    @Param('id', ParseIntPipe) userId: number,
+    @Body() updateUserDTO: Prisma.UserUpdateInput,
+  ): Promise<User> {
+    return await this.userService.updateUser(userId, updateUserDTO);
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id', ParseIntPipe) userId: number): Promise<User> {
+    return await this.userService.deleteUser(userId);
   }
 }

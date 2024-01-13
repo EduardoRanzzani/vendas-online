@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -13,7 +15,7 @@ import { UserId } from '../decorators/user-id.decorator';
 import { UserType } from '../user/enum/user-type.enum';
 import { AddressService } from './address.service';
 
-@Roles(UserType.USER)
+@Roles(UserType.ADMIN, UserType.USER)
 @Controller('address')
 @ApiTags('Addresses')
 export class AddressController {
@@ -26,13 +28,18 @@ export class AddressController {
     @Body() createAddressDTO: Prisma.AddressCreateInput,
   ): Promise<Address> {
     console.log({ userId });
-    return await this.addressService.create(createAddressDTO, userId);
+    return this.addressService.create(createAddressDTO, userId);
   }
 
   @Get()
   @ApiOkResponse({ type: Promise<Address[]>, isArray: true })
   async getAllAddress(): Promise<Address[]> {
-    return await this.addressService.findAllAddress();
+    return this.addressService.findAllAddress();
+  }
+
+  @Get(':id')
+  async getById(@Param('id', ParseIntPipe) id: number): Promise<Address> {
+    return this.addressService.findById(id);
   }
 
   @Get('/user/:userId')
@@ -40,6 +47,21 @@ export class AddressController {
   async getAllAddressByUser(
     @Param('userId', ParseIntPipe) userId: number,
   ): Promise<Address[]> {
-    return await this.addressService.findAllAddressByUserId(userId);
+    return this.addressService.findAllAddressByUserId(userId);
+  }
+
+  @Patch(':id')
+  async updateAddress(
+    @Param('id', ParseIntPipe) addressId: number,
+    @Body() updateAddressDTO: Prisma.AddressUpdateInput,
+  ) {
+    return this.addressService.updateAddress(addressId, updateAddressDTO);
+  }
+
+  @Delete(':id')
+  async deleteAddress(
+    @Param('id', ParseIntPipe) addressId: number,
+  ): Promise<Address> {
+    return this.addressService.deleteAddress(addressId);
   }
 }

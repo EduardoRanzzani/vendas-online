@@ -56,7 +56,6 @@ export class CityService {
     if (!city) {
       throw new NotFoundException('City not found');
     }
-
     return city;
   }
 }
