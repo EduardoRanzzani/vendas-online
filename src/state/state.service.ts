@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, State } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -14,16 +14,25 @@ export class StateService {
     orderBy?: Prisma.StateOrderByWithRelationInput;
   }): Promise<State[]> {
     const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.state.findMany({
+
+    const states = await this.prisma.state.findMany({
       skip,
       take,
       cursor,
       where,
       orderBy,
     });
+    if (!states) {
+      throw new NotFoundException('No states found');
+    }
+    return states;
   }
 
   async findAll() {
-    return this.prisma.state.findMany();
+    const states = await this.prisma.state.findMany();
+    if (!states) {
+      throw new NotFoundException('No states found');
+    }
+    return states;
   }
 }
