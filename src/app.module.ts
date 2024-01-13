@@ -8,10 +8,10 @@ import { CacheModule } from './cache/cache.module';
 import { CityModule } from './city/city.module';
 import { RolesGuard } from './guards/roles.guard';
 import { PrismaModule } from './prisma/prisma.module';
-import { StateModule } from './state/state.module';
-import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { StateModule } from './state/state.module';
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
