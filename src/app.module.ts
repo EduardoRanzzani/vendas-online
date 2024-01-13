@@ -5,11 +5,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { AddressModule } from './address/address.module';
 import { AuthModule } from './auth/auth.module';
 import { CacheModule } from './cache/cache.module';
+import { CategoryModule } from './category/category.module';
 import { CityModule } from './city/city.module';
 import { RolesGuard } from './guards/roles.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProductModule } from './product/product.module';
-import { ReviewsModule } from './reviews/reviews.module';
 import { StateModule } from './state/state.module';
 import { UserModule } from './user/user.module';
 @Module({
@@ -24,7 +24,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     JwtModule,
     ProductModule,
-    ReviewsModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [

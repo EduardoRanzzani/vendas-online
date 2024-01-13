@@ -53,16 +53,25 @@ CREATE TABLE `tb_address` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `tb_product` (
+CREATE TABLE `tb_category` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL,
-    `price` DOUBLE NOT NULL,
-    `sale` BOOLEAN NOT NULL DEFAULT false,
-    `availibility` ENUM('IN_STORE', 'ONLINE') NOT NULL,
+    `updated_at` DATETIME(3) NULL,
 
-    UNIQUE INDEX `tb_product_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `tb_product` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `price` DOUBLE NOT NULL,
+    `image` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+    `category_id` INTEGER NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -74,3 +83,6 @@ ALTER TABLE `tb_address` ADD CONSTRAINT `tb_address_user_id_fkey` FOREIGN KEY (`
 
 -- AddForeignKey
 ALTER TABLE `tb_address` ADD CONSTRAINT `tb_address_city_id_fkey` FOREIGN KEY (`city_id`) REFERENCES `tb_city`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `tb_product` ADD CONSTRAINT `tb_product_category_id_fkey` FOREIGN KEY (`category_id`) REFERENCES `tb_category`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

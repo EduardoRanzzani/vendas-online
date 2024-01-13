@@ -1,8 +1,11 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { City } from '@prisma/client';
+import { Roles } from '../decorators/roles.decorator';
+import { UserType } from '../user/enum/user-type.enum';
 import { CityService } from './city.service';
 
+@Roles(UserType.ADMIN, UserType.USER)
 @Controller('city')
 @ApiTags('Cities')
 export class CityController {
