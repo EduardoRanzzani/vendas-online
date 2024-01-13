@@ -2,11 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { compare } from 'bcrypt';
-import { ReturnUser } from '../user/dto/return-user.dto';
 import { UserService } from '../user/user.service';
 import { LoginPayload } from './dto/login-payload.dto';
 import { LoginDTO } from './dto/login.dto';
 import { ReturnLogin } from './dto/return-login.dto';
+import { ReturnUser } from './dto/return-user.dto';
 
 @Injectable()
 export class AuthService {

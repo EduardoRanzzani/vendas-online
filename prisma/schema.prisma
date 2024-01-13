@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
+    provider = "mysql"
     url      = env("DATABASE_URL")
 }
 
@@ -67,4 +67,56 @@ model Address {
     cityId Int  @map("city_id")
 
     @@map("tb_address")
+}
+
+model Product {
+    id        Int      @id @default(autoincrement())
+    name      String   @unique
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    price     Float
+    sale      Boolean  @default(false)
+
+    availibility Availibility
+    reviews      Review[]
+    tags         Tag[]
+    description  Description?
+
+    @@map("tb_product")
+}
+
+model Description {
+    id      Int    @id @default(autoincrement())
+    content String
+
+    product   Product @relation(fields: [productId], references: [id])
+    productId Int     @unique @map("product_id")
+
+    @@map("tb_description")
+}
+
+model Review {
+    id      Int    @id @default(autoincrement())
+    title   String
+    content String
+    rating  Int
+
+    product   Product @relation(fields: [productId], references: [id])
+    productId Int     @map("product_id")
+
+    @@map("tb_reviews")
+}
+
+model Tag {
+    id      Int    @id @default(autoincrement())
+    content String @unique
+
+    product Product[]
+
+    @@map("tb_tag")
+}
+
+enum Availibility {
+    IN_STORE
+    ONLINE
 }

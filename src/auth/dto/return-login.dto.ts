@@ -1,4 +1,4 @@
-import { ReturnUser } from '../../user/dto/return-user.dto';
+import { ReturnUser } from './return-user.dto';
 
 export class ReturnLogin {
   access_token: string;

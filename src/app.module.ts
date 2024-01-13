@@ -10,7 +10,8 @@ import { RolesGuard } from './guards/roles.guard';
 import { PrismaModule } from './prisma/prisma.module';
 import { StateModule } from './state/state.module';
 import { UserModule } from './user/user.module';
-
+import { ProductModule } from './product/product.module';
+import { ReviewsModule } from './reviews/reviews.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -22,6 +23,8 @@ import { UserModule } from './user/user.module';
     CacheModule,
     AuthModule,
     JwtModule,
+    ProductModule,
+    ReviewsModule,
   ],
   controllers: [],
   providers: [

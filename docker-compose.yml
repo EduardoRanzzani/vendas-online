@@ -1,18 +1,11 @@
-version: '3.8'
 services:
   dev-db-vendas-prisma:
-    image: postgres:13
+    image: mysql
+    env_file:
+      - .env
     ports:
-      - 5434:5432
-    environment:
-      POSTGRES_USER: vendas
-      POSTGRES_PASSWORD: password-vendas
-      POSTGRES_DB: vendas-prisma
-  test-db-vendas-prisma:
-    image: postgres:13
-    ports:
-      - 5435:5432
-    environment:
-      POSTGRES_USER: vendas-test
-      POSTGRES_PASSWORD: password-vendas
-      POSTGRES_DB: test-vendas-prisma
+      - 3306:3306
+# environment:
+#   POSTGRES_USER: vendas
+#   POSTGRES_PASSWORD: password-vendas
+#   POSTGRES_DB: vendas-prisma

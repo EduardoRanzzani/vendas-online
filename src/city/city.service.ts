@@ -37,7 +37,7 @@ export class CityService {
   async findAllCitiesByName(name: string): Promise<City[]> {
     return this.cacheService.getCache<City[]>(`name_${name}`, () => {
       return this.prisma.city.findMany({
-        where: { name: { contains: name, mode: 'insensitive' } },
+        where: { name: { contains: name } },
         include: { state: true },
       });
     });

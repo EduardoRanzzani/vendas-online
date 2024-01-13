@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Address } from '@prisma/client';
+import { Address, Prisma } from '@prisma/client';
 import { CityService } from '../city/city.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
-import { CreateAddressDTO } from './dto/create-address.dto';
 
 @Injectable()
 export class AddressService {
@@ -14,16 +13,20 @@ export class AddressService {
   ) {}
 
   async create(
-    createAddressDTO: CreateAddressDTO,
+    createAddressDTO: Prisma.AddressCreateInput,
     userId: number,
   ): Promise<Address> {
     await this.userService.findUserById(userId);
-    await this.cityService.findCityById(createAddressDTO.cityId);
+    await this.cityService.findCityById(createAddressDTO.city.connect.id);
 
     return this.prisma.address.create({
       data: {
         ...createAddressDTO,
-        userId,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
       },
       include: {
         city: {
