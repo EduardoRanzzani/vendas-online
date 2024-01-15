@@ -12,8 +12,8 @@ import { UserType } from './enum/user-type.enum';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createUser(createUserDTO: Prisma.UserCreateInput): Promise<User> {
-    const user = await this.findUserByEmail(createUserDTO.email).catch(
+  async create(createUserDTO: Prisma.UserCreateInput): Promise<User> {
+    const user = await this.findByEmail(createUserDTO.email).catch(
       () => undefined,
     );
 
@@ -41,7 +41,7 @@ export class UserService {
     return users;
   }
 
-  async findUserById(id: number): Promise<User> {
+  async findById(id: number): Promise<User> {
     const user = await this.prisma.user.findFirst({
       where: { id },
       include: {
@@ -60,7 +60,7 @@ export class UserService {
     return user;
   }
 
-  async findUserByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { email },
       include: {
@@ -79,16 +79,16 @@ export class UserService {
     return user;
   }
 
-  async updateUser(
+  async update(
     id: number,
     updateUserDTO: Prisma.UserUpdateInput,
   ): Promise<User> {
-    await this.findUserById(id);
+    await this.findById(id);
     return this.prisma.user.update({ where: { id }, data: updateUserDTO });
   }
 
-  async deleteUser(id: number): Promise<User> {
-    await this.findUserById(id);
+  async delete(id: number): Promise<User> {
+    await this.findById(id);
     return this.prisma.user.delete({ where: { id } });
   }
 }

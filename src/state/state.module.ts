@@ -5,5 +5,6 @@ import { StateService } from './state.service';
 @Module({
   controllers: [StateController],
   providers: [StateService],
+  exports: [StateService],
 })
 export class StateModule {}

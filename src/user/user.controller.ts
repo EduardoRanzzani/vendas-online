@@ -27,7 +27,7 @@ export class UserController {
   async createUser(
     @Body() createUserDTO: Prisma.UserCreateInput,
   ): Promise<User> {
-    return await this.userService.createUser(createUserDTO);
+    return await this.userService.create(createUserDTO);
   }
 
   @Get()
@@ -37,12 +37,12 @@ export class UserController {
 
   @Get(':id')
   async getUserById(@Param('id', ParseIntPipe) userId: number): Promise<User> {
-    return await this.userService.findUserById(userId);
+    return await this.userService.findById(userId);
   }
 
   @Get('/email/:email')
   async getUserByEmail(@Param('email') email: string): Promise<User> {
-    return this.userService.findUserByEmail(email);
+    return this.userService.findByEmail(email);
   }
 
   @Patch(':id')
@@ -50,11 +50,11 @@ export class UserController {
     @Param('id', ParseIntPipe) userId: number,
     @Body() updateUserDTO: Prisma.UserUpdateInput,
   ): Promise<User> {
-    return await this.userService.updateUser(userId, updateUserDTO);
+    return await this.userService.update(userId, updateUserDTO);
   }
 
   @Delete(':id')
   async deleteUser(@Param('id', ParseIntPipe) userId: number): Promise<User> {
-    return await this.userService.deleteUser(userId);
+    return await this.userService.delete(userId);
   }
 }

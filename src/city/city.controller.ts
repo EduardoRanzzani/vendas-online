@@ -1,5 +1,5 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { City } from '@prisma/client';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from '../user/enum/user-type.enum';
@@ -12,17 +12,13 @@ export class CityController {
   constructor(private readonly service: CityService) {}
 
   @Get()
-  @ApiCreatedResponse()
   async findAll(): Promise<City[]> {
     return await this.service.findAll();
   }
 
-  @Get('paginated')
-  async findAllPaginated(
-    @Query('page', ParseIntPipe) page: number = 1,
-    @Query('pageSize', ParseIntPipe) pageSize: number = 10,
-  ): Promise<City[]> {
-    return await this.service.findAllPaginated(page, pageSize);
+  @Get('/page')
+  async findPaginated(): Promise<City[]> {
+    return await this.service.findAllPaginated({});
   }
 
   @Get(':stateId')

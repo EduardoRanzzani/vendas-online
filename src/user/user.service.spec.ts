@@ -4,8 +4,6 @@ import { Prisma, User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from './user.service';
 
-jest.mock('bcrypt');
-
 describe('UserService', () => {
   let userService: UserService;
   let prismaService: PrismaService;
@@ -33,13 +31,11 @@ describe('UserService', () => {
       jest
         .spyOn(prismaService.user, 'create')
         .mockResolvedValue(createUserDTO as User);
+
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
-      //   jest
-      //     .spyOn(bcrypt, 'hash')
-      //     .mockImplementation((pass, salt, cb) => cb(null, ''));
 
       // Act
-      const result = await userService.createUser(createUserDTO);
+      const result = await userService.create(createUserDTO);
 
       // Assert
       expect(result).toEqual(createUserDTO as User);
@@ -60,7 +56,7 @@ describe('UserService', () => {
         .mockResolvedValue(createUserDTO as User);
 
       // Act & Assert
-      await expect(userService.createUser(createUserDTO)).rejects.toThrow(
+      await expect(userService.create(createUserDTO)).rejects.toThrow(
         ConflictException,
       );
     });
@@ -112,7 +108,7 @@ describe('UserService', () => {
       jest.spyOn(prismaService.user, 'findFirst').mockResolvedValue(mockUser);
 
       // Act
-      const result = await userService.findUserById(userId);
+      const result = await userService.findById(userId);
 
       // Assert
       expect(result).toEqual(mockUser);
@@ -125,7 +121,7 @@ describe('UserService', () => {
       jest.spyOn(prismaService.user, 'findFirst').mockResolvedValue(null);
 
       // Act & Assert
-      await expect(userService.findUserById(userId)).rejects.toThrowError(
+      await expect(userService.findById(userId)).rejects.toThrowError(
         NotFoundException,
       );
     });
@@ -150,7 +146,7 @@ describe('UserService', () => {
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(mockUser);
 
       // Act
-      const result = await userService.findUserByEmail(userEmail);
+      const result = await userService.findByEmail(userEmail);
 
       // Assert
       expect(result).toEqual(mockUser);
@@ -163,7 +159,7 @@ describe('UserService', () => {
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
 
       // Act & Assert
-      await expect(userService.findUserByEmail(userEmail)).rejects.toThrowError(
+      await expect(userService.findByEmail(userEmail)).rejects.toThrowError(
         NotFoundException,
       );
     });

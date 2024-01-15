@@ -35,4 +35,12 @@ export class StateService {
     }
     return states;
   }
+
+  async findStateById(id: number): Promise<State> {
+    const state = await this.prisma.state.findUnique({ where: { id } });
+    if (!state) {
+      throw new NotFoundException('State not found');
+    }
+    return state;
+  }
 }

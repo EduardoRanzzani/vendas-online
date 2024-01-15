@@ -28,7 +28,7 @@ export class AddressController {
     @Body() createAddressDTO: Prisma.AddressCreateInput,
   ): Promise<Address> {
     console.log({ userId });
-    return this.addressService.create(createAddressDTO, userId);
+    return this.addressService.createAddress(createAddressDTO, userId);
   }
 
   @Get()

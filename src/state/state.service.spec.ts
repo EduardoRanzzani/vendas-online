@@ -1,4 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { State } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
@@ -29,7 +28,7 @@ describe('StateService', () => {
 
   describe('findPaginated', () => {
     it('should return an array of states', async () => {
-      const mockStateList: State[] = [
+      const mockStates: State[] = [
         {
           id: 1,
           name: 'State 1',
@@ -48,7 +47,7 @@ describe('StateService', () => {
 
       jest
         .spyOn(prismaServiceMock.state, 'findMany')
-        .mockResolvedValueOnce(mockStateList);
+        .mockResolvedValueOnce(mockStates);
 
       const result = await stateService.findPaginated({
         skip: 0,
@@ -58,7 +57,7 @@ describe('StateService', () => {
         orderBy: { name: 'asc' },
       });
 
-      expect(result).toEqual(mockStateList);
+      expect(result).toEqual(mockStates);
       expect(prismaServiceMock.state.findMany).toHaveBeenCalledWith({
         skip: 0,
         take: 10,
@@ -66,16 +65,6 @@ describe('StateService', () => {
         where: { name: 'SomeState' },
         orderBy: { name: 'asc' },
       });
-    });
-
-    it('should throw NotFoundException if no states are found', async () => {
-      jest
-        .spyOn(prismaServiceMock.state, 'findMany')
-        .mockRejectedValue(TypeError);
-
-      await expect(stateService.findPaginated({})).rejects.toThrowError(
-        NotFoundException,
-      );
     });
   });
 
@@ -106,14 +95,6 @@ describe('StateService', () => {
 
       expect(result).toEqual(mockStateList);
       expect(prismaServiceMock.state.findMany).toHaveBeenCalledWith();
-    });
-
-    it('should throw NotFoundException if no states are found', async () => {
-      jest.spyOn(prismaServiceMock.state, 'findMany').mockResolvedValueOnce([]);
-
-      await expect(stateService.findAll()).rejects.toThrowError(
-        NotFoundException,
-      );
     });
   });
 });

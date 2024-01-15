@@ -12,11 +12,11 @@ export class AddressService {
     private readonly cityService: CityService,
   ) {}
 
-  async create(
+  async createAddress(
     createAddressDTO: Prisma.AddressCreateInput,
     userId: number,
   ): Promise<Address> {
-    await this.userService.findUserById(userId);
+    await this.userService.findById(userId);
     await this.cityService.findCityById(createAddressDTO.city.connect.id);
 
     return this.prisma.address.create({
@@ -65,7 +65,7 @@ export class AddressService {
   }
 
   async findAllAddressByUserId(userId: number): Promise<Address[]> {
-    await this.userService.findUserById(userId);
+    await this.userService.findById(userId);
     const address = await this.prisma.address.findMany({ where: { userId } });
     if (!address) {
       throw new NotFoundException('Address not found');

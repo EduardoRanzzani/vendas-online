@@ -21,9 +21,12 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Roles(UserType.ADMIN, UserType.USER)
-  @Post()
-  create(@Body() createProductDto: Prisma.ProductCreateInput) {
-    return this.productService.create(createProductDto);
+  @Post(':categoryId')
+  create(
+    @Param(':categoryId', ParseIntPipe) categoryId: number,
+    @Body() createProductDto: Prisma.ProductCreateInput,
+  ) {
+    return this.productService.create(categoryId, createProductDto);
   }
 
   @Get()
