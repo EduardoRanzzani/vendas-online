@@ -28,7 +28,7 @@ export class StateService {
     return states;
   }
 
-  async findAll() {
+  async findAll(): Promise<State[]> {
     const states = await this.prisma.state.findMany();
     if (!states) {
       throw new NotFoundException('No states found');

@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -22,6 +21,7 @@ model User {
     updatedAt DateTime? @updatedAt @map("updated_at")
 
     addresses Address[]
+    Cart      Cart[]
 
     @@map("tb_user")
 }
@@ -81,15 +81,43 @@ model Category {
 }
 
 model Product {
+    id         Int       @id @default(autoincrement())
+    name       String    @unique
+    price      Float
+    image      String
+    categoryId Int       @map("category_id")
+    createdAt  DateTime  @default(now()) @map("created_at")
+    updatedAt  DateTime? @updatedAt @map("updated_at")
+
+    category    Category       @relation(fields: [categoryId], references: [id])
+    CartProduct CartProducts[]
+
+    @@map("tb_product")
+}
+
+model Cart {
     id        Int       @id @default(autoincrement())
-    name      String    @unique
-    price     Float
-    image     String
+    userId    Int       @map("user_id")
+    active    Boolean   @default(true)
     createdAt DateTime  @default(now()) @map("created_at")
     updatedAt DateTime? @updatedAt @map("updated_at")
 
-    category   Category @relation(fields: [categoryId], references: [id])
-    categoryId Int      @map("category_id")
+    user User @relation(fields: [userId], references: [id])
 
-    @@map("tb_product")
+    CartProduct CartProducts[]
+
+    @@map("tb_cart")
+}
+
+model CartProducts {
+    id        Int @id @default(autoincrement())
+    cartId    Int @map("cart_id")
+    productId Int @map("product_id")
+    amount    Int
+
+    cart    Cart    @relation(fields: [cartId], references: [id])
+    product Product @relation(fields: [productId], references: [id])
+
+    @@index([cartId, productId])
+    @@map("tb_cart_product")
 }

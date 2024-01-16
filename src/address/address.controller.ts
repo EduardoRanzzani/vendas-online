@@ -54,7 +54,7 @@ export class AddressController {
   async updateAddress(
     @Param('id', ParseIntPipe) addressId: number,
     @Body() updateAddressDTO: Prisma.AddressUpdateInput,
-  ) {
+  ): Promise<Address> {
     return this.addressService.updateAddress(addressId, updateAddressDTO);
   }
 

@@ -8,7 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Category, Prisma } from '@prisma/client';
 import { Roles } from '../decorators/roles.decorator';
 import { UserType } from '../user/enum/user-type.enum';
 import { CategoryService } from './category.service';
@@ -20,17 +20,19 @@ export class CategoryController {
 
   @Post()
   @Roles(UserType.ADMIN)
-  async create(@Body() createCategoryDto: Prisma.CategoryCreateInput) {
+  async create(
+    @Body() createCategoryDto: Prisma.CategoryCreateInput,
+  ): Promise<Category> {
     return await this.categoryService.create(createCategoryDto);
   }
 
   @Get()
-  async findAll() {
+  async findAll(): Promise<Category[]> {
     return await this.categoryService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Category> {
     return await this.categoryService.findById(id);
   }
 
@@ -38,12 +40,12 @@ export class CategoryController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: Prisma.CategoryUpdateInput,
-  ) {
+  ): Promise<Category> {
     return await this.categoryService.update(id, updateCategoryDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<Category> {
     return await this.categoryService.remove(id);
   }
 }
