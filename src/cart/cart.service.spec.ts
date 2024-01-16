@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Cart, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
@@ -226,7 +227,9 @@ describe('CartService', () => {
 
     it('should throw NotFoundException if cart is not found', async () => {
       // Arrange
-      jest.spyOn(prismaService.cart, 'update').mockResolvedValue(null);
+      jest
+        .spyOn(prismaService.cart, 'update')
+        .mockRejectedValue(NotFoundException);
       const cartId = 1;
       await expect(service.update(cartId, {} as any)).rejects.toThrow();
     });
@@ -264,11 +267,49 @@ describe('CartService', () => {
 
     it('should throw NotFoundException if cart is not found', async () => {
       // Arrange
-      jest.spyOn(prismaService.cart, 'delete').mockResolvedValue(null);
-
+      jest
+        .spyOn(prismaService.cart, 'delete')
+        .mockRejectedValue(NotFoundException);
       const cartId = 1;
-
       await expect(service.remove(cartId)).rejects.toThrow();
+    });
+  });
+
+  describe('VerifyActiveCart', () => {
+    it('should return a specific cart by userId', async () => {
+      // Mocking Dependencies
+      jest.spyOn(service, 'verifyActiveCart').mockResolvedValue({
+        id: 1,
+        userId: 1,
+        active: true,
+        createdAt: new Date(),
+        updatedAt: null,
+      });
+
+      // Arrange
+      const mockedCart: Cart = {
+        id: 1,
+        userId: 1,
+        active: true,
+        createdAt: new Date(),
+        updatedAt: null,
+      };
+      jest
+        .spyOn(prismaService.cart, 'findUnique')
+        .mockResolvedValue(mockedCart);
+      const userId = 1;
+      const result = await service.verifyActiveCart(userId);
+      // Assert
+      expect(result).toEqual(mockedCart);
+    });
+
+    it('should throw NotFoundException if cart is not found', async () => {
+      // Arrange
+      jest
+        .spyOn(prismaService.cart, 'findUnique')
+        .mockRejectedValue(NotFoundException);
+      const userId = 1;
+      await expect(service.verifyActiveCart(userId)).rejects.toThrow();
     });
   });
 });
