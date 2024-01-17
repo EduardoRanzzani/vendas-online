@@ -39,24 +39,20 @@ export class CartService {
       cart = activeCart;
     }
 
-    let existingCartProduct: CartProduct =
-      await this.prisma.cartProduct.findUnique({
-        where: {
-          cartId_productId: {
-            cartId: cart.id,
-            productId: addProductsDTO.productId,
-          },
-        },
-      });
+    const existingCartProduct = await this.prisma.cartProduct.findFirst({
+      where: {
+        cartId: cart.id,
+        productId: addProductsDTO.productId,
+      },
+    });
 
     if (existingCartProduct) {
       existingCartProduct.amount += addProductsDTO.amount;
       return await this.prisma.cartProduct.update({
         where: {
-          cartId_productId: {
-            cartId: cart.id,
-            productId: addProductsDTO.productId,
-          },
+          id: existingCartProduct.id,
+          cartId: cart.id,
+          productId: addProductsDTO.productId,
         },
         data: {
           ...existingCartProduct,
@@ -64,13 +60,13 @@ export class CartService {
         include: { product: true, cart: { include: { user: true } } },
       });
     } else {
-      existingCartProduct = {
+      const newCartProduct = {
         cartId: cart.id,
         productId: addProductsDTO.productId,
         amount: addProductsDTO.amount,
       };
       return this.prisma.cartProduct.create({
-        data: existingCartProduct,
+        data: newCartProduct,
         include: { product: true, cart: { include: { user: true } } },
       });
     }
@@ -87,12 +83,10 @@ export class CartService {
     }
 
     const existingCart: CartProduct = await this.prisma.cartProduct
-      .findUnique({
+      .findFirst({
         where: {
-          cartId_productId: {
-            cartId: cart.id,
-            productId: productsDTO.productId,
-          },
+          cartId: cart.id,
+          productId: productsDTO.productId,
         },
       })
       .catch(() => undefined);
@@ -104,10 +98,9 @@ export class CartService {
     if (existingCart.amount === 1) {
       await this.prisma.cartProduct.delete({
         where: {
-          cartId_productId: {
-            cartId: cart.id,
-            productId: productsDTO.productId,
-          },
+          id: existingCart.id,
+          cartId: cart.id,
+          productId: productsDTO.productId,
         },
       });
       throw new HttpException('No products left', HttpStatus.NO_CONTENT);
@@ -117,10 +110,9 @@ export class CartService {
 
     return await this.prisma.cartProduct.update({
       where: {
-        cartId_productId: {
-          cartId: cart.id,
-          productId: productsDTO.productId,
-        },
+        id: existingCart.id,
+        cartId: cart.id,
+        productId: productsDTO.productId,
       },
       data: {
         ...existingCart,
