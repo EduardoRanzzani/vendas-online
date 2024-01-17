@@ -27,14 +27,15 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "pretest:e2e": "yarn db:test:restart",
     "test:e2e": "dotenv -e .env.test -- jest --watch --no-cache --config ./test/jest-e2e.json",
-    "test:address-service": "jest src/address/address.service.spec.ts",
-    "test:cache-service": "jest src/cache/cache.service.spec.ts",
-    "test:cart-service": "jest src/cart/cart.service.spec.ts",
-    "test:category-service": "jest src/category/category.service.spec.ts",
-    "test:city-service": "jest src/city/city.service.spec.ts",
-    "test:product-service": "jest src/product/product.service.spec.ts",
-    "test:state-service": "jest src/state/state.service.spec.ts",
-    "test:user-service": "jest src/user/user.service.spec.ts"
+    "test:address-service": "jest src/address/__tests__/address.service.spec.ts",
+    "test:address-controller": "jest src/address/__tests__/address.controller.spec.ts",
+    "test:cache-service": "jest src/cache/__tests__/cache.service.spec.ts",
+    "test:cart-service": "jest src/cart/__tests__/cart.service.spec.ts",
+    "test:category-service": "jest src/category/__tests__/category.service.spec.ts",
+    "test:city-service": "jest src/city/__tests__/city.service.spec.ts",
+    "test:product-service": "jest src/product/__tests__/product.service.spec.ts",
+    "test:state-service": "jest src/state/__tests__/state.service.spec.ts",
+    "test:user-service": "jest src/user/__tests__/user.service.spec.ts"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.2.0",

@@ -1,9 +1,9 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Prisma } from '@prisma/client';
-import { CategoryService } from '../category/category.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { ProductService } from './product.service';
+import { CategoryService } from '../../category/category.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import { ProductService } from '../product.service';
 
 describe('ProductService', () => {
   let productService: ProductService;

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { City, State } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
-import { StateService } from '../state/state.service';
-import { CityService } from './city.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import { StateService } from '../../state/state.service';
+import { CityService } from '../city.service';
 
 describe('CityService', () => {
   let cityService: CityService;

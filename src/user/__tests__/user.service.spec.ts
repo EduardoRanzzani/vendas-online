@@ -1,8 +1,8 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Prisma, User } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
-import { UserService } from './user.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import { UserService } from '../user.service';
 
 describe('UserService', () => {
   let userService: UserService;

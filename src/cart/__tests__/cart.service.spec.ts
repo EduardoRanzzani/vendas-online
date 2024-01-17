@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Cart, Prisma } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
-import { UserService } from '../user/user.service';
-import { CartService } from './cart.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import { UserService } from '../../user/user.service';
+import { CartService } from '../cart.service';
 
 describe('CartService', () => {
   let service: CartService;
@@ -294,9 +294,7 @@ describe('CartService', () => {
         createdAt: new Date(),
         updatedAt: null,
       };
-      jest
-        .spyOn(prismaService.cart, 'findUnique')
-        .mockResolvedValue(mockedCart);
+      jest.spyOn(prismaService.cart, 'findFirst').mockResolvedValue(mockedCart);
       const userId = 1;
       const result = await service.verifyActiveCart(userId);
       // Assert
@@ -306,7 +304,7 @@ describe('CartService', () => {
     it('should throw NotFoundException if cart is not found', async () => {
       // Arrange
       jest
-        .spyOn(prismaService.cart, 'findUnique')
+        .spyOn(prismaService.cart, 'findFirst')
         .mockRejectedValue(NotFoundException);
       const userId = 1;
       await expect(service.verifyActiveCart(userId)).rejects.toThrow();
