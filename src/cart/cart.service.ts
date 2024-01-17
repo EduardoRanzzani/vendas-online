@@ -26,7 +26,10 @@ export class CartService {
     return activeCart;
   }
 
-  async addProductsInCart(userId: number, addProductsDTO: IncludeProductDTO) {
+  async addProductsInCart(
+    userId: number,
+    addProductsDTO: IncludeProductDTO,
+  ): Promise<CartProduct> {
     const activeCart = await this.verifyActiveCart(userId).catch(() => null);
     let cart: Cart;
 
@@ -72,7 +75,10 @@ export class CartService {
     }
   }
 
-  async removeProductsFromCart(userId: number, productsDTO: IncludeProductDTO) {
+  async removeProductsFromCart(
+    userId: number,
+    productsDTO: IncludeProductDTO,
+  ): Promise<CartProduct> | undefined {
     const activeCart = await this.verifyActiveCart(userId).catch(() => null);
     let cart: Cart;
 

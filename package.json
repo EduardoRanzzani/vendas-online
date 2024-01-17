@@ -31,11 +31,17 @@
     "test:address-controller": "jest src/address/__tests__/address.controller.spec.ts",
     "test:cache-service": "jest src/cache/__tests__/cache.service.spec.ts",
     "test:cart-service": "jest src/cart/__tests__/cart.service.spec.ts",
+    "test:cart-controller": "jest src/cart/__tests__/cart.controller.spec.ts",
     "test:category-service": "jest src/category/__tests__/category.service.spec.ts",
+    "test:category-controller": "jest src/category/__tests__/category.controller.spec.ts",
     "test:city-service": "jest src/city/__tests__/city.service.spec.ts",
+    "test:city-controller": "jest src/city/__tests__/city.controller.spec.ts",
     "test:product-service": "jest src/product/__tests__/product.service.spec.ts",
+    "test:product-controller": "jest src/product/__tests__/product.controller.spec.ts",
     "test:state-service": "jest src/state/__tests__/state.service.spec.ts",
-    "test:user-service": "jest src/user/__tests__/user.service.spec.ts"
+    "test:state-controller": "jest src/state/__tests__/state.controller.spec.ts",
+    "test:user-service": "jest src/user/__tests__/user.service.spec.ts",
+    "test:user-controller": "jest src/user/__tests__/user.controller.spec.ts"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^2.2.0",
