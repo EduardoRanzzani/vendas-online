@@ -19,7 +19,6 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Post()
-  @Roles(UserType.ADMIN)
   async create(
     @Body() createCategoryDto: Prisma.CategoryCreateInput,
   ): Promise<Category> {

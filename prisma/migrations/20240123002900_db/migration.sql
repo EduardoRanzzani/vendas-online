@@ -90,11 +90,40 @@ CREATE TABLE `tb_cart` (
 
 -- CreateTable
 CREATE TABLE `tb_cart_product` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `cart_id` INTEGER NOT NULL,
     `product_id` INTEGER NOT NULL,
     `amount` INTEGER NOT NULL,
 
-    PRIMARY KEY (`cart_id`, `product_id`)
+    INDEX `tb_cart_product_cart_id_product_id_idx`(`cart_id`, `product_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `tb_payment_status` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `tb_payment` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `status_id` INTEGER NOT NULL,
+    `price` DOUBLE NOT NULL,
+    `discount` DOUBLE NOT NULL,
+    `final_price` DOUBLE NOT NULL,
+    `type` ENUM('CREDIT_CARD', 'DEBIT_CARD', 'PIX', 'BOLETO') NOT NULL,
+    `amount_payments` INTEGER NOT NULL,
+    `code` VARCHAR(191) NOT NULL,
+    `date_payment` DATETIME(3) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
@@ -117,3 +146,6 @@ ALTER TABLE `tb_cart_product` ADD CONSTRAINT `tb_cart_product_cart_id_fkey` FORE
 
 -- AddForeignKey
 ALTER TABLE `tb_cart_product` ADD CONSTRAINT `tb_cart_product_product_id_fkey` FOREIGN KEY (`product_id`) REFERENCES `tb_product`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `tb_payment` ADD CONSTRAINT `tb_payment_status_id_fkey` FOREIGN KEY (`status_id`) REFERENCES `tb_payment_status`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

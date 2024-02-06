@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Cart, CartProduct, Prisma } from '@prisma/client';
+import { Cart, CartProducts, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserService } from '../user/user.service';
 import { IncludeProductDTO } from './dto/include-product.dto';
@@ -29,7 +29,7 @@ export class CartService {
   async addProductsInCart(
     userId: number,
     addProductsDTO: IncludeProductDTO,
-  ): Promise<CartProduct> {
+  ): Promise<CartProducts> {
     const activeCart = await this.verifyActiveCart(userId).catch(() => null);
     let cart: Cart;
 
@@ -42,34 +42,34 @@ export class CartService {
       cart = activeCart;
     }
 
-    const existingCartProduct = await this.prisma.cartProduct.findFirst({
+    const existingCartProducts = await this.prisma.cartProducts.findFirst({
       where: {
         cartId: cart.id,
         productId: addProductsDTO.productId,
       },
     });
 
-    if (existingCartProduct) {
-      existingCartProduct.amount += addProductsDTO.amount;
-      return await this.prisma.cartProduct.update({
+    if (existingCartProducts) {
+      existingCartProducts.amount += addProductsDTO.amount;
+      return await this.prisma.cartProducts.update({
         where: {
-          id: existingCartProduct.id,
+          id: existingCartProducts.id,
           cartId: cart.id,
           productId: addProductsDTO.productId,
         },
         data: {
-          ...existingCartProduct,
+          ...existingCartProducts,
         },
         include: { product: true, cart: { include: { user: true } } },
       });
     } else {
-      const newCartProduct = {
+      const newCartProducts = {
         cartId: cart.id,
         productId: addProductsDTO.productId,
         amount: addProductsDTO.amount,
       };
-      return this.prisma.cartProduct.create({
-        data: newCartProduct,
+      return this.prisma.cartProducts.create({
+        data: newCartProducts,
         include: { product: true, cart: { include: { user: true } } },
       });
     }
@@ -78,7 +78,7 @@ export class CartService {
   async removeProductsFromCart(
     userId: number,
     productsDTO: IncludeProductDTO,
-  ): Promise<CartProduct> | undefined {
+  ): Promise<CartProducts> | undefined {
     const activeCart = await this.verifyActiveCart(userId).catch(() => null);
     let cart: Cart;
 
@@ -88,7 +88,7 @@ export class CartService {
       cart = activeCart;
     }
 
-    const existingCart: CartProduct = await this.prisma.cartProduct
+    const existingCart: CartProducts = await this.prisma.cartProducts
       .findFirst({
         where: {
           cartId: cart.id,
@@ -102,7 +102,7 @@ export class CartService {
     }
 
     if (existingCart.amount === 1) {
-      await this.prisma.cartProduct.delete({
+      await this.prisma.cartProducts.delete({
         where: {
           id: existingCart.id,
           cartId: cart.id,
@@ -114,7 +114,7 @@ export class CartService {
 
     existingCart.amount -= productsDTO.amount;
 
-    return await this.prisma.cartProduct.update({
+    return await this.prisma.cartProducts.update({
       where: {
         id: existingCart.id,
         cartId: cart.id,

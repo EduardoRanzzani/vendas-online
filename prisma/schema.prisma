@@ -89,8 +89,8 @@ model Product {
     createdAt  DateTime  @default(now()) @map("created_at")
     updatedAt  DateTime? @updatedAt @map("updated_at")
 
-    category    Category       @relation(fields: [categoryId], references: [id])
-    CartProduct CartProducts[]
+    category     Category       @relation(fields: [categoryId], references: [id])
+    Cartproducts Cartproducts[]
 
     @@map("tb_product")
 }
@@ -104,12 +104,12 @@ model Cart {
 
     user User @relation(fields: [userId], references: [id])
 
-    CartProduct CartProducts[]
+    Cartproducts Cartproducts[]
 
     @@map("tb_cart")
 }
 
-model CartProducts {
+model Cartproducts {
     id        Int @id @default(autoincrement())
     cartId    Int @map("cart_id")
     productId Int @map("product_id")
@@ -120,4 +120,39 @@ model CartProducts {
 
     @@index([cartId, productId])
     @@map("tb_cart_product")
+}
+
+model PaymentStatus {
+    id        Int       @id @default(autoincrement())
+    name      String
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime? @updatedAt @map("updated_at")
+    Payment   Payment[]
+
+    @@map("tb_payment_status")
+}
+
+model Payment {
+    id             Int         @id @default(autoincrement())
+    statusId       Int         @map("status_id")
+    price          Float
+    discount       Float
+    finalPrice     Float       @map("final_price")
+    type           PaymentType
+    amountPayments Int         @map("amount_payments")
+    code           String
+    datePayment    DateTime    @map("date_payment")
+    createdAt      DateTime    @default(now()) @map("created_at")
+    updatedAt      DateTime?   @updatedAt @map("updated_at")
+
+    status PaymentStatus @relation(fields: [statusId], references: [id])
+
+    @@map("tb_payment")
+}
+
+enum PaymentType {
+    CREDIT_CARD
+    DEBIT_CARD
+    PIX
+    BOLETO
 }

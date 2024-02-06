@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Cart, CartProduct } from '@prisma/client';
+import { Cart, Cartproducts } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserService } from '../../user/user.service';
 import { CartController } from '../cart.controller';
@@ -29,7 +29,7 @@ describe('CartController', () => {
 
       const userId = 1;
 
-      const expectedResult: CartProduct = {
+      const expectedResult: Cartproducts = {
         id: 1,
         cartId: 1,
         productId: 1,
@@ -54,7 +54,7 @@ describe('CartController', () => {
 
       const userId = 1;
 
-      const expectedResult: CartProduct = {
+      const expectedResult: Cartproducts = {
         id: 1,
         cartId: 1,
         productId: 1,
